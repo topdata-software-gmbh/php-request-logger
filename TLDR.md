@@ -15,17 +15,10 @@ A PHP-based system for logging and analyzing HTTP requests.
 ```php
 // Initialize the logger
 require_once 'RequestLogger.php';
-$logger = new RequestLogger('/var/log/http-requests');
+$logger = new RequestLogger('/var/log/http-requests'); // make sure the directory exists and is writable
 
 // In your request handling code:
-$logger->logRequest([
-    'method' => $_SERVER['REQUEST_METHOD'],
-    'uri' => $_SERVER['REQUEST_URI'],
-    'ip' => $_SERVER['REMOTE_ADDR'],
-    'user_agent' => $_SERVER['HTTP_USER_AGENT'],
-    'referrer' => $_SERVER['HTTP_REFERER'] ?? '',
-    'post_data' => $_POST  // Will be automatically sanitized
-]);
+$logger->logRequest();
 ```
 
 ### Analyzing Logs
@@ -50,6 +43,11 @@ echo "\nMost Common URIs:\n";
 foreach ($stats['top_uris'] as $uri => $count) {
     echo "$uri: $count hits\n";
 }
+```
+
+### Watching the Request Log in Real-Time
+```bash
+tail -f /var/log/http-requests/2023-01-01/requests.jsonl | jq
 ```
 
 ## What You Get
